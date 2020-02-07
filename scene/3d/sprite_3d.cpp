@@ -535,7 +535,7 @@ void Sprite3D::set_texture(const Ref<Texture> &p_texture) {
 	texture = p_texture;
 	if (texture.is_valid()) {
 		texture->set_flags(texture->get_flags()); //remove repeat from texture, it looks bad in sprites
-		texture->connect(CoreStringNames::get_singleton()->changed, this, SceneStringNames::get_singleton()->_queue_update);
+		texture->connect_signal(CoreStringNames::get_singleton()->changed, this, SceneStringNames::get_singleton()->_queue_update);
 	}
 	_queue_update();
 }
@@ -949,7 +949,7 @@ void AnimatedSprite3D::set_sprite_frames(const Ref<SpriteFrames> &p_frames) {
 		frames->disconnect("changed", this, "_res_changed");
 	frames = p_frames;
 	if (frames.is_valid())
-		frames->connect("changed", this, "_res_changed");
+		frames->connect_signal("changed", this, "_res_changed");
 
 	if (!frames.is_valid()) {
 		frame = 0;

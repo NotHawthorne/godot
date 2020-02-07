@@ -317,8 +317,8 @@ FindInFilesDialog::FindInFilesDialog() {
 
 	_search_text_line_edit = memnew(LineEdit);
 	_search_text_line_edit->set_h_size_flags(SIZE_EXPAND_FILL);
-	_search_text_line_edit->connect("text_changed", this, "_on_search_text_modified");
-	_search_text_line_edit->connect("text_entered", this, "_on_search_text_entered");
+	_search_text_line_edit->connect_signal("text_changed", this, "_on_search_text_modified");
+	_search_text_line_edit->connect_signal("text_entered", this, "_on_search_text_entered");
 	gc->add_child(_search_text_line_edit);
 
 	gc->add_child(memnew(Control)); // Space to maintain the grid aligned.
@@ -354,12 +354,12 @@ FindInFilesDialog::FindInFilesDialog() {
 
 		Button *folder_button = memnew(Button);
 		folder_button->set_text("...");
-		folder_button->connect("pressed", this, "_on_folder_button_pressed");
+		folder_button->connect_signal("pressed", this, "_on_folder_button_pressed");
 		hbc->add_child(folder_button);
 
 		_folder_dialog = memnew(FileDialog);
 		_folder_dialog->set_mode(FileDialog::MODE_OPEN_DIR);
-		_folder_dialog->connect("dir_selected", this, "_on_folder_selected");
+		_folder_dialog->connect_signal("dir_selected", this, "_on_folder_selected");
 		add_child(_folder_dialog);
 
 		gc->add_child(hbc);
@@ -500,8 +500,8 @@ const char *FindInFilesPanel::SIGNAL_FILES_MODIFIED = "files_modified";
 FindInFilesPanel::FindInFilesPanel() {
 
 	_finder = memnew(FindInFiles);
-	_finder->connect(FindInFiles::SIGNAL_RESULT_FOUND, this, "_on_result_found");
-	_finder->connect(FindInFiles::SIGNAL_FINISHED, this, "_on_finished");
+	_finder->connect_signal(FindInFiles::SIGNAL_RESULT_FOUND, this, "_on_result_found");
+	_finder->connect_signal(FindInFiles::SIGNAL_FINISHED, this, "_on_finished");
 	add_child(_finder);
 
 	VBoxContainer *vbc = memnew(VBoxContainer);
@@ -533,7 +533,7 @@ FindInFilesPanel::FindInFilesPanel() {
 
 		_cancel_button = memnew(Button);
 		_cancel_button->set_text(TTR("Cancel"));
-		_cancel_button->connect("pressed", this, "_on_cancel_button_clicked");
+		_cancel_button->connect_signal("pressed", this, "_on_cancel_button_clicked");
 		_cancel_button->hide();
 		hbc->add_child(_cancel_button);
 
@@ -543,8 +543,8 @@ FindInFilesPanel::FindInFilesPanel() {
 	_results_display = memnew(Tree);
 	_results_display->add_font_override("font", EditorNode::get_singleton()->get_gui_base()->get_font("source", "EditorFonts"));
 	_results_display->set_v_size_flags(SIZE_EXPAND_FILL);
-	_results_display->connect("item_selected", this, "_on_result_selected");
-	_results_display->connect("item_edited", this, "_on_item_edited");
+	_results_display->connect_signal("item_selected", this, "_on_result_selected");
+	_results_display->connect_signal("item_edited", this, "_on_item_edited");
 	_results_display->set_hide_root(true);
 	_results_display->set_select_mode(Tree::SELECT_ROW);
 	_results_display->set_allow_rmb_select(true);
@@ -562,12 +562,12 @@ FindInFilesPanel::FindInFilesPanel() {
 
 		_replace_line_edit = memnew(LineEdit);
 		_replace_line_edit->set_h_size_flags(SIZE_EXPAND_FILL);
-		_replace_line_edit->connect("text_changed", this, "_on_replace_text_changed");
+		_replace_line_edit->connect_signal("text_changed", this, "_on_replace_text_changed");
 		_replace_container->add_child(_replace_line_edit);
 
 		_replace_all_button = memnew(Button);
 		_replace_all_button->set_text(TTR("Replace all (no undo)"));
-		_replace_all_button->connect("pressed", this, "_on_replace_all_clicked");
+		_replace_all_button->connect_signal("pressed", this, "_on_replace_all_clicked");
 		_replace_container->add_child(_replace_all_button);
 
 		_replace_container->hide();

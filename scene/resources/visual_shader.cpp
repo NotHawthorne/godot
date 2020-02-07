@@ -304,10 +304,10 @@ void VisualShader::add_node(Type p_type, const Ref<VisualShaderNode> &p_node, co
 	if (input.is_valid()) {
 		input->shader_mode = shader_mode;
 		input->shader_type = p_type;
-		input->connect("input_type_changed", this, "_input_type_changed", varray(p_type, p_id));
+		input->connect_signal("input_type_changed", this, "_input_type_changed", varray(p_type, p_id));
 	}
 
-	n.node->connect("changed", this, "_queue_update");
+	n.node->connect_signal("changed", this, "_queue_update");
 
 	Ref<VisualShaderNodeCustom> custom = n.node;
 	if (custom.is_valid()) {

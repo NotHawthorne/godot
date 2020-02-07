@@ -124,7 +124,7 @@ void Polygon2D::_notification(int p_what) {
 				}
 
 				if (skeleton_node) {
-					skeleton_node->connect("bone_setup_changed", this, "_skeleton_bone_setup_changed");
+					skeleton_node->connect_signal("bone_setup_changed", this, "_skeleton_bone_setup_changed");
 				}
 
 				current_skeleton_id = new_skeleton_id;

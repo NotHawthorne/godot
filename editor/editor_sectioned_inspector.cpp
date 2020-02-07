@@ -294,7 +294,7 @@ void SectionedInspector::register_search_box(LineEdit *p_box) {
 
 	search_box = p_box;
 	inspector->register_text_enter(p_box);
-	search_box->connect("text_changed", this, "_search_changed");
+	search_box->connect_signal("text_changed", this, "_search_changed");
 }
 
 void SectionedInspector::_search_changed(const String &p_what) {
@@ -333,7 +333,7 @@ SectionedInspector::SectionedInspector() :
 	right_vb->add_child(inspector, true);
 	inspector->set_use_doc_hints(true);
 
-	sections->connect("cell_selected", this, "_section_selected");
+	sections->connect_signal("cell_selected", this, "_section_selected");
 }
 
 SectionedInspector::~SectionedInspector() {

@@ -118,7 +118,7 @@ void AnimationNodeBlendSpace1D::add_blend_point(const Ref<AnimationRootNode> &p_
 	blend_points[p_at_index].node = p_node;
 	blend_points[p_at_index].position = p_position;
 
-	blend_points[p_at_index].node->connect("tree_changed", this, "_tree_changed", varray(), CONNECT_REFERENCE_COUNTED);
+	blend_points[p_at_index].node->connect_signal("tree_changed", this, "_tree_changed", varray(), CONNECT_REFERENCE_COUNTED);
 
 	blend_points_used++;
 	emit_signal("tree_changed");
@@ -139,7 +139,7 @@ void AnimationNodeBlendSpace1D::set_blend_point_node(int p_point, const Ref<Anim
 	}
 
 	blend_points[p_point].node = p_node;
-	blend_points[p_point].node->connect("tree_changed", this, "_tree_changed", varray(), CONNECT_REFERENCE_COUNTED);
+	blend_points[p_point].node->connect_signal("tree_changed", this, "_tree_changed", varray(), CONNECT_REFERENCE_COUNTED);
 
 	emit_signal("tree_changed");
 }

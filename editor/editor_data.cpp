@@ -1024,7 +1024,7 @@ void EditorSelection::add_node(Node *p_node) {
 	}
 	selection[p_node] = meta;
 
-	p_node->connect("tree_exiting", this, "_node_removed", varray(p_node), CONNECT_ONESHOT);
+	p_node->connect_signal("tree_exiting", this, "_node_removed", varray(p_node), CONNECT_ONESHOT);
 
 	//emit_signal("selection_changed");
 }

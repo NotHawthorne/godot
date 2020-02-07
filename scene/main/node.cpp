@@ -2276,7 +2276,7 @@ void Node::_duplicate_signals(const Node *p_original, Node *p_copy) const {
 				copytarget = p_copy->get_node(ptarget);
 
 			if (copy && copytarget && !copy->is_connected(E->get().signal, copytarget, E->get().method)) {
-				copy->connect(E->get().signal, copytarget, E->get().method, E->get().binds, E->get().flags);
+				copy->connect_signal(E->get().signal, copytarget, E->get().method, E->get().binds, E->get().flags);
 			}
 		}
 	}
@@ -2434,7 +2434,7 @@ void Node::_replace_connections_target(Node *p_new_target) {
 			c.source->disconnect(c.signal, this, c.method);
 			bool valid = p_new_target->has_method(c.method) || Ref<Script>(p_new_target->get_script()).is_null() || Ref<Script>(p_new_target->get_script())->has_method(c.method);
 			ERR_CONTINUE_MSG(!valid, "Attempt to connect signal '" + c.source->get_class() + "." + c.signal + "' to nonexistent method '" + c.target->get_class() + "." + c.method + "'.");
-			c.source->connect(c.signal, p_new_target, c.method, c.binds, c.flags);
+			c.source->connect_signal(c.signal, p_new_target, c.method, c.binds, c.flags);
 		}
 	}
 }

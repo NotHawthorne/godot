@@ -184,7 +184,7 @@ void TileMap::set_tileset(const Ref<TileSet> &p_tileset) {
 	tile_set = p_tileset;
 
 	if (tile_set.is_valid()) {
-		tile_set->connect("changed", this, "_recreate_quadrants");
+		tile_set->connect_signal("changed", this, "_recreate_quadrants");
 		tile_set->add_change_receptor(this);
 	} else {
 		clear();

@@ -113,7 +113,7 @@ BakedLightmapEditorPlugin::BakedLightmapEditorPlugin(EditorNode *p_node) {
 	bake->set_icon(editor->get_gui_base()->get_icon("Bake", "EditorIcons"));
 	bake->set_text(TTR("Bake Lightmaps"));
 	bake->hide();
-	bake->connect("pressed", this, "_bake");
+	bake->connect_signal("pressed", this, "_bake");
 	add_control_to_container(CONTAINER_SPATIAL_EDITOR_MENU, bake);
 	lightmap = NULL;
 

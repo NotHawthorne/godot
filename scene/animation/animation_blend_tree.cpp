@@ -884,8 +884,8 @@ void AnimationNodeBlendTree::add_node(const StringName &p_name, Ref<AnimationNod
 	emit_changed();
 	emit_signal("tree_changed");
 
-	p_node->connect("tree_changed", this, "_tree_changed", varray(), CONNECT_REFERENCE_COUNTED);
-	p_node->connect("changed", this, "_node_changed", varray(p_name), CONNECT_REFERENCE_COUNTED);
+	p_node->connect_signal("tree_changed", this, "_tree_changed", varray(), CONNECT_REFERENCE_COUNTED);
+	p_node->connect_signal("changed", this, "_node_changed", varray(p_name), CONNECT_REFERENCE_COUNTED);
 }
 
 Ref<AnimationNode> AnimationNodeBlendTree::get_node(const StringName &p_name) const {
@@ -988,7 +988,7 @@ void AnimationNodeBlendTree::rename_node(const StringName &p_name, const StringN
 		}
 	}
 	//connection must be done with new name
-	nodes[p_new_name].node->connect("changed", this, "_node_changed", varray(p_new_name), CONNECT_REFERENCE_COUNTED);
+	nodes[p_new_name].node->connect_signal("changed", this, "_node_changed", varray(p_new_name), CONNECT_REFERENCE_COUNTED);
 
 	emit_signal("tree_changed");
 }

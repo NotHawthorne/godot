@@ -1136,7 +1136,7 @@ void Viewport::set_world(const Ref<World> &p_world) {
 	if (own_world.is_valid()) {
 		if (world.is_valid()) {
 			own_world = world->duplicate();
-			world->connect(CoreStringNames::get_singleton()->changed, this, "_own_world_changed");
+			world->connect_signal(CoreStringNames::get_singleton()->changed, this, "_own_world_changed");
 		} else {
 			own_world = Ref<World>(memnew(World));
 		}
@@ -2488,7 +2488,7 @@ List<Control *>::Element *Viewport::_gui_add_root_control(Control *p_control) {
 
 List<Control *>::Element *Viewport::_gui_add_subwindow_control(Control *p_control) {
 
-	p_control->connect("visibility_changed", this, "_subwindow_visibility_changed");
+	p_control->connect_signal("visibility_changed", this, "_subwindow_visibility_changed");
 
 	if (p_control->is_visible_in_tree()) {
 		gui.subwindow_order_dirty = true;
@@ -2869,7 +2869,7 @@ void Viewport::set_use_own_world(bool p_world) {
 	} else {
 		if (world.is_valid()) {
 			own_world = world->duplicate();
-			world->connect(CoreStringNames::get_singleton()->changed, this, "_own_world_changed");
+			world->connect_signal(CoreStringNames::get_singleton()->changed, this, "_own_world_changed");
 		} else {
 			own_world = Ref<World>(memnew(World));
 		}

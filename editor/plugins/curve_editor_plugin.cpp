@@ -49,7 +49,7 @@ CurveEditor::CurveEditor() {
 	set_clip_contents(true);
 
 	_context_menu = memnew(PopupMenu);
-	_context_menu->connect("id_pressed", this, "_on_context_menu_item_selected");
+	_context_menu->connect_signal("id_pressed", this, "_on_context_menu_item_selected");
 	add_child(_context_menu);
 
 	_presets_menu = memnew(PopupMenu);
@@ -60,7 +60,7 @@ CurveEditor::CurveEditor() {
 	_presets_menu->add_item(TTR("Ease In"), PRESET_EASE_IN);
 	_presets_menu->add_item(TTR("Ease Out"), PRESET_EASE_OUT);
 	_presets_menu->add_item(TTR("Smoothstep"), PRESET_SMOOTHSTEP);
-	_presets_menu->connect("id_pressed", this, "_on_preset_item_selected");
+	_presets_menu->connect_signal("id_pressed", this, "_on_preset_item_selected");
 	_context_menu->add_child(_presets_menu);
 }
 
@@ -77,8 +77,8 @@ void CurveEditor::set_curve(Ref<Curve> curve) {
 	_curve_ref = curve;
 
 	if (_curve_ref.is_valid()) {
-		_curve_ref->connect(CoreStringNames::get_singleton()->changed, this, "_curve_changed");
-		_curve_ref->connect(Curve::SIGNAL_RANGE_CHANGED, this, "_curve_changed");
+		_curve_ref->connect_signal(CoreStringNames::get_singleton()->changed, this, "_curve_changed");
+		_curve_ref->connect_signal(Curve::SIGNAL_RANGE_CHANGED, this, "_curve_changed");
 	}
 
 	_selected_point = -1;

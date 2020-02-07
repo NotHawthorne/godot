@@ -46,7 +46,7 @@ void ResourcePreloaderEditor::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_READY) {
 
-		//NodePath("/root")->connect("node_removed", this,"_node_removed",Vector<Variant>(),true);
+		//NodePath("/root")->connect_signal("node_removed", this,"_node_removed",Vector<Variant>(),true);
 	}
 
 	if (p_what == NOTIFICATION_DRAW) {
@@ -382,7 +382,7 @@ ResourcePreloaderEditor::ResourcePreloaderEditor() {
 	add_child(file);
 
 	tree = memnew(Tree);
-	tree->connect("button_pressed", this, "_cell_button_pressed");
+	tree->connect_signal("button_pressed", this, "_cell_button_pressed");
 	tree->set_columns(2);
 	tree->set_column_min_width(0, 2);
 	tree->set_column_min_width(1, 3);
@@ -396,10 +396,10 @@ ResourcePreloaderEditor::ResourcePreloaderEditor() {
 	dialog = memnew(AcceptDialog);
 	add_child(dialog);
 
-	load->connect("pressed", this, "_load_pressed");
-	paste->connect("pressed", this, "_paste_pressed");
-	file->connect("files_selected", this, "_files_load_request");
-	tree->connect("item_edited", this, "_item_edited");
+	load->connect_signal("pressed", this, "_load_pressed");
+	paste->connect_signal("pressed", this, "_paste_pressed");
+	file->connect_signal("files_selected", this, "_files_load_request");
+	tree->connect_signal("item_edited", this, "_item_edited");
 	loading_scene = false;
 }
 

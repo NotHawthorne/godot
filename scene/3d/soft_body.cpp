@@ -458,7 +458,7 @@ void SoftBody::update_physics_server() {
 
 		become_mesh_owner();
 		PhysicsServer::get_singleton()->soft_body_set_mesh(physics_rid, get_mesh());
-		VS::get_singleton()->connect("frame_pre_draw", this, "_draw_soft_mesh");
+		VS::get_singleton()->connect_signal("frame_pre_draw", this, "_draw_soft_mesh");
 	} else {
 
 		PhysicsServer::get_singleton()->soft_body_set_mesh(physics_rid, NULL);

@@ -155,11 +155,11 @@ void MultiplayerAPI::set_network_peer(const Ref<NetworkedMultiplayerPeer> &p_pee
 	network_peer = p_peer;
 
 	if (network_peer.is_valid()) {
-		network_peer->connect("peer_connected", this, "_add_peer");
-		network_peer->connect("peer_disconnected", this, "_del_peer");
-		network_peer->connect("connection_succeeded", this, "_connected_to_server");
-		network_peer->connect("connection_failed", this, "_connection_failed");
-		network_peer->connect("server_disconnected", this, "_server_disconnected");
+		network_peer->connect_signal("peer_connected", this, "_add_peer");
+		network_peer->connect_signal("peer_disconnected", this, "_del_peer");
+		network_peer->connect_signal("connection_succeeded", this, "_connected_to_server");
+		network_peer->connect_signal("connection_failed", this, "_connection_failed");
+		network_peer->connect_signal("server_disconnected", this, "_server_disconnected");
 	}
 }
 

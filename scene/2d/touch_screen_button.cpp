@@ -74,7 +74,7 @@ void TouchScreenButton::set_shape(const Ref<Shape2D> &p_shape) {
 	shape = p_shape;
 
 	if (shape.is_valid())
-		shape->connect("changed", this, "update");
+		shape->connect_signal("changed", this, "update");
 
 	update();
 }

@@ -174,7 +174,7 @@ void AnimationCache::_update_cache() {
 
 		if (!connected_nodes.has(path.node)) {
 			connected_nodes.insert(path.node);
-			path.node->connect("tree_exiting", this, "_node_exit_tree", Node::make_binds(path.node), CONNECT_ONESHOT);
+			path.node->connect_signal("tree_exiting", this, "_node_exit_tree", Node::make_binds(path.node), CONNECT_ONESHOT);
 		}
 	}
 
@@ -318,7 +318,7 @@ void AnimationCache::set_animation(const Ref<Animation> &p_animation) {
 	animation = p_animation;
 
 	if (animation.is_valid())
-		animation->connect("changed", this, "_animation_changed");
+		animation->connect_signal("changed", this, "_animation_changed");
 }
 
 void AnimationCache::_bind_methods() {

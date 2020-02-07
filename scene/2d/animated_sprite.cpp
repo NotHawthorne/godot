@@ -474,7 +474,7 @@ void AnimatedSprite::set_sprite_frames(const Ref<SpriteFrames> &p_frames) {
 		frames->disconnect("changed", this, "_res_changed");
 	frames = p_frames;
 	if (frames.is_valid())
-		frames->connect("changed", this, "_res_changed");
+		frames->connect_signal("changed", this, "_res_changed");
 
 	if (!frames.is_valid()) {
 		frame = 0;

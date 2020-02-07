@@ -1426,7 +1426,7 @@ void Object::get_signals_connected_to_this(List<Connection> *p_connections) cons
 	}
 }
 
-Error Object::connect(const StringName &p_signal, Object *p_to_object, const StringName &p_to_method, const Vector<Variant> &p_binds, uint32_t p_flags) {
+Error Object::connect_signal(const StringName &p_signal, Object *p_to_object, const StringName &p_to_method, const Vector<Variant> &p_binds, uint32_t p_flags) {
 
 	ERR_FAIL_NULL_V(p_to_object, ERR_INVALID_PARAMETER);
 
@@ -1711,7 +1711,7 @@ void Object::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_signal_connection_list", "signal"), &Object::_get_signal_connection_list);
 	ClassDB::bind_method(D_METHOD("get_incoming_connections"), &Object::_get_incoming_connections);
 
-	ClassDB::bind_method(D_METHOD("connect", "signal", "target", "method", "binds", "flags"), &Object::connect, DEFVAL(Array()), DEFVAL(0));
+	ClassDB::bind_method(D_METHOD("connect_signal", "signal", "target", "method", "binds", "flags"), &Object::connect_signal, DEFVAL(Array()), DEFVAL(0));
 	ClassDB::bind_method(D_METHOD("disconnect", "signal", "target", "method"), &Object::disconnect);
 	ClassDB::bind_method(D_METHOD("is_connected", "signal", "target", "method"), &Object::is_connected);
 

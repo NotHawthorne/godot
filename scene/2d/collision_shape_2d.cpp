@@ -160,7 +160,7 @@ void CollisionShape2D::set_shape(const Ref<Shape2D> &p_shape) {
 	}
 
 	if (shape.is_valid())
-		shape->connect("changed", this, "_shape_changed");
+		shape->connect_signal("changed", this, "_shape_changed");
 
 	update_configuration_warning();
 }

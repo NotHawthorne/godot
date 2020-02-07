@@ -262,25 +262,25 @@ EditorPropertyRootMotion::EditorPropertyRootMotion() {
 	assign->set_flat(true);
 	assign->set_h_size_flags(SIZE_EXPAND_FILL);
 	assign->set_clip_text(true);
-	assign->connect("pressed", this, "_node_assign");
+	assign->connect_signal("pressed", this, "_node_assign");
 	hbc->add_child(assign);
 
 	clear = memnew(Button);
 	clear->set_flat(true);
-	clear->connect("pressed", this, "_node_clear");
+	clear->connect_signal("pressed", this, "_node_clear");
 	hbc->add_child(clear);
 
 	filter_dialog = memnew(ConfirmationDialog);
 	add_child(filter_dialog);
 	filter_dialog->set_title(TTR("Edit Filtered Tracks:"));
-	filter_dialog->connect("confirmed", this, "_confirmed");
+	filter_dialog->connect_signal("confirmed", this, "_confirmed");
 
 	filters = memnew(Tree);
 	filter_dialog->add_child(filters);
 	filters->set_v_size_flags(SIZE_EXPAND_FILL);
 	filters->set_hide_root(true);
-	filters->connect("item_activated", this, "_confirmed");
-	//filters->connect("item_edited", this, "_filter_edited");
+	filters->connect_signal("item_activated", this, "_confirmed");
+	//filters->connect_signal("item_edited", this, "_filter_edited");
 }
 //////////////////////////
 

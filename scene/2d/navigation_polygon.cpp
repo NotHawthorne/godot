@@ -476,7 +476,7 @@ void NavigationPolygonInstance::set_navigation_polygon(const Ref<NavigationPolyg
 	}
 	navpoly = p_navpoly;
 	if (navpoly.is_valid()) {
-		navpoly->connect(CoreStringNames::get_singleton()->changed, this, "_navpoly_changed");
+		navpoly->connect_signal(CoreStringNames::get_singleton()->changed, this, "_navpoly_changed");
 	}
 	_navpoly_changed();
 

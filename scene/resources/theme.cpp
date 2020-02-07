@@ -308,7 +308,7 @@ void Theme::set_default_theme_font(const Ref<Font> &p_default_font) {
 	default_theme_font = p_default_font;
 
 	if (default_theme_font.is_valid()) {
-		default_theme_font->connect("changed", this, "_emit_theme_changed", varray(), CONNECT_REFERENCE_COUNTED);
+		default_theme_font->connect_signal("changed", this, "_emit_theme_changed", varray(), CONNECT_REFERENCE_COUNTED);
 	}
 
 	_change_notify();
@@ -372,7 +372,7 @@ void Theme::set_icon(const StringName &p_name, const StringName &p_type, const R
 	icon_map[p_type][p_name] = p_icon;
 
 	if (p_icon.is_valid()) {
-		icon_map[p_type][p_name]->connect("changed", this, "_emit_theme_changed", varray(), CONNECT_REFERENCE_COUNTED);
+		icon_map[p_type][p_name]->connect_signal("changed", this, "_emit_theme_changed", varray(), CONNECT_REFERENCE_COUNTED);
 	}
 
 	if (new_value) {
@@ -485,7 +485,7 @@ void Theme::set_stylebox(const StringName &p_name, const StringName &p_type, con
 	style_map[p_type][p_name] = p_style;
 
 	if (p_style.is_valid()) {
-		style_map[p_type][p_name]->connect("changed", this, "_emit_theme_changed", varray(), CONNECT_REFERENCE_COUNTED);
+		style_map[p_type][p_name]->connect_signal("changed", this, "_emit_theme_changed", varray(), CONNECT_REFERENCE_COUNTED);
 	}
 
 	if (new_value)
@@ -560,7 +560,7 @@ void Theme::set_font(const StringName &p_name, const StringName &p_type, const R
 	font_map[p_type][p_name] = p_font;
 
 	if (p_font.is_valid()) {
-		font_map[p_type][p_name]->connect("changed", this, "_emit_theme_changed", varray(), CONNECT_REFERENCE_COUNTED);
+		font_map[p_type][p_name]->connect_signal("changed", this, "_emit_theme_changed", varray(), CONNECT_REFERENCE_COUNTED);
 	}
 
 	if (new_value) {

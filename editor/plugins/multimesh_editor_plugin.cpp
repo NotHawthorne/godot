@@ -297,7 +297,7 @@ MultiMeshEditor::MultiMeshEditor() {
 	options->set_icon(EditorNode::get_singleton()->get_gui_base()->get_icon("MultiMeshInstance", "EditorIcons"));
 
 	options->get_popup()->add_item(TTR("Populate Surface"));
-	options->get_popup()->connect("id_pressed", this, "_menu_option");
+	options->get_popup()->connect_signal("id_pressed", this, "_menu_option");
 
 	populate_dialog = memnew(ConfirmationDialog);
 	populate_dialog->set_title(TTR("Populate MultiMesh"));
@@ -315,7 +315,7 @@ MultiMeshEditor::MultiMeshEditor() {
 	Button *b = memnew(Button);
 	hbc->add_child(b);
 	b->set_text("..");
-	b->connect("pressed", this, "_browse", make_binds(false));
+	b->connect_signal("pressed", this, "_browse", make_binds(false));
 
 	vbc->add_margin_child(TTR("Target Surface:"), hbc);
 
@@ -327,7 +327,7 @@ MultiMeshEditor::MultiMeshEditor() {
 	hbc->add_child(b);
 	b->set_text("..");
 	vbc->add_margin_child(TTR("Source Mesh:"), hbc);
-	b->connect("pressed", this, "_browse", make_binds(true));
+	b->connect_signal("pressed", this, "_browse", make_binds(true));
 
 	populate_axis = memnew(OptionButton);
 	populate_axis->add_item(TTR("X-Axis"));
@@ -373,10 +373,10 @@ MultiMeshEditor::MultiMeshEditor() {
 
 	populate_dialog->get_ok()->set_text(TTR("Populate"));
 
-	populate_dialog->get_ok()->connect("pressed", this, "_populate");
+	populate_dialog->get_ok()->connect_signal("pressed", this, "_populate");
 	std = memnew(SceneTreeDialog);
 	populate_dialog->add_child(std);
-	std->connect("selected", this, "_browsed");
+	std->connect_signal("selected", this, "_browsed");
 
 	_last_pp_node = NULL;
 

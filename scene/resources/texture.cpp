@@ -1729,7 +1729,7 @@ void CurveTexture::set_curve(Ref<Curve> p_curve) {
 		}
 		_curve = p_curve;
 		if (_curve.is_valid()) {
-			_curve->connect(CoreStringNames::get_singleton()->changed, this, "_update");
+			_curve->connect_signal(CoreStringNames::get_singleton()->changed, this, "_update");
 		}
 		_update();
 	}
@@ -1825,7 +1825,7 @@ void GradientTexture::set_gradient(Ref<Gradient> p_gradient) {
 	}
 	gradient = p_gradient;
 	if (gradient.is_valid()) {
-		gradient->connect(CoreStringNames::get_singleton()->changed, this, "_update");
+		gradient->connect_signal(CoreStringNames::get_singleton()->changed, this, "_update");
 	}
 	_update();
 	emit_changed();
@@ -2171,7 +2171,7 @@ AnimatedTexture::AnimatedTexture() {
 	fps = 4;
 	prev_ticks = 0;
 	current_frame = 0;
-	VisualServer::get_singleton()->connect("frame_pre_draw", this, "_update_proxy");
+	VisualServer::get_singleton()->connect_signal("frame_pre_draw", this, "_update_proxy");
 
 #ifndef NO_THREADS
 	rw_lock = RWLock::create();

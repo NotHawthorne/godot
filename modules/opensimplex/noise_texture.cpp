@@ -185,7 +185,7 @@ void NoiseTexture::set_noise(Ref<OpenSimplexNoise> p_noise) {
 	}
 	noise = p_noise;
 	if (noise.is_valid()) {
-		noise->connect(CoreStringNames::get_singleton()->changed, this, "_queue_update");
+		noise->connect_signal(CoreStringNames::get_singleton()->changed, this, "_queue_update");
 	}
 	_queue_update();
 }

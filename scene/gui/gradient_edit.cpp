@@ -304,7 +304,7 @@ void GradientEdit::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_ENTER_TREE) {
 		if (!picker->is_connected("color_changed", this, "_color_changed")) {
-			picker->connect("color_changed", this, "_color_changed");
+			picker->connect_signal("color_changed", this, "_color_changed");
 		}
 	}
 	if (p_what == NOTIFICATION_DRAW) {

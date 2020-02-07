@@ -510,14 +510,14 @@ InspectorDock::InspectorDock(EditorNode *p_editor, EditorData &p_editor_data) {
 	resource_new_button->set_tooltip(TTR("Create a new resource in memory and edit it."));
 	resource_new_button->set_icon(get_icon("New", "EditorIcons"));
 	general_options_hb->add_child(resource_new_button);
-	resource_new_button->connect("pressed", this, "_new_resource");
+	resource_new_button->connect_signal("pressed", this, "_new_resource");
 	resource_new_button->set_focus_mode(Control::FOCUS_NONE);
 
 	resource_load_button = memnew(ToolButton);
 	resource_load_button->set_tooltip(TTR("Load an existing resource from disk and edit it."));
 	resource_load_button->set_icon(get_icon("Load", "EditorIcons"));
 	general_options_hb->add_child(resource_load_button);
-	resource_load_button->connect("pressed", this, "_open_resource_selector");
+	resource_load_button->connect_signal("pressed", this, "_open_resource_selector");
 	resource_load_button->set_focus_mode(Control::FOCUS_NONE);
 
 	resource_save_button = memnew(MenuButton);
@@ -526,7 +526,7 @@ InspectorDock::InspectorDock(EditorNode *p_editor, EditorData &p_editor_data) {
 	general_options_hb->add_child(resource_save_button);
 	resource_save_button->get_popup()->add_item(TTR("Save"), RESOURCE_SAVE);
 	resource_save_button->get_popup()->add_item(TTR("Save As..."), RESOURCE_SAVE_AS);
-	resource_save_button->get_popup()->connect("id_pressed", this, "_menu_option");
+	resource_save_button->get_popup()->connect_signal("id_pressed", this, "_menu_option");
 	resource_save_button->set_focus_mode(Control::FOCUS_NONE);
 	resource_save_button->set_disabled(true);
 
@@ -538,7 +538,7 @@ InspectorDock::InspectorDock(EditorNode *p_editor, EditorData &p_editor_data) {
 	backward_button->set_flat(true);
 	backward_button->set_tooltip(TTR("Go to the previous edited object in history."));
 	backward_button->set_disabled(true);
-	backward_button->connect("pressed", this, "_edit_back");
+	backward_button->connect_signal("pressed", this, "_edit_back");
 
 	forward_button = memnew(ToolButton);
 	general_options_hb->add_child(forward_button);
@@ -546,14 +546,14 @@ InspectorDock::InspectorDock(EditorNode *p_editor, EditorData &p_editor_data) {
 	forward_button->set_flat(true);
 	forward_button->set_tooltip(TTR("Go to the next edited object in history."));
 	forward_button->set_disabled(true);
-	forward_button->connect("pressed", this, "_edit_forward");
+	forward_button->connect_signal("pressed", this, "_edit_forward");
 
 	history_menu = memnew(MenuButton);
 	history_menu->set_tooltip(TTR("History of recently edited objects."));
 	history_menu->set_icon(get_icon("History", "EditorIcons"));
 	general_options_hb->add_child(history_menu);
-	history_menu->connect("about_to_show", this, "_prepare_history");
-	history_menu->get_popup()->connect("id_pressed", this, "_select_history");
+	history_menu->connect_signal("about_to_show", this, "_prepare_history");
+	history_menu->get_popup()->connect_signal("id_pressed", this, "_select_history");
 
 	HBoxContainer *node_info_hb = memnew(HBoxContainer);
 	add_child(node_info_hb);
@@ -566,12 +566,12 @@ InspectorDock::InspectorDock(EditorNode *p_editor, EditorData &p_editor_data) {
 	object_menu->set_icon(get_icon("Tools", "EditorIcons"));
 	node_info_hb->add_child(object_menu);
 	object_menu->set_tooltip(TTR("Object properties."));
-	object_menu->get_popup()->connect("id_pressed", this, "_menu_option");
+	object_menu->get_popup()->connect_signal("id_pressed", this, "_menu_option");
 
 	new_resource_dialog = memnew(CreateDialog);
 	editor->get_gui_base()->add_child(new_resource_dialog);
 	new_resource_dialog->set_base_type("Resource");
-	new_resource_dialog->connect("create", this, "_resource_created");
+	new_resource_dialog->connect_signal("create", this, "_resource_created");
 
 	search = memnew(LineEdit);
 	search->set_h_size_flags(Control::SIZE_EXPAND_FILL);
@@ -586,7 +586,7 @@ InspectorDock::InspectorDock(EditorNode *p_editor, EditorData &p_editor_data) {
 	warning->set_icon(get_icon("NodeWarning", "EditorIcons"));
 	warning->set_clip_text(true);
 	warning->hide();
-	warning->connect("pressed", this, "_warning_pressed");
+	warning->connect_signal("pressed", this, "_warning_pressed");
 
 	warning_dialog = memnew(AcceptDialog);
 	editor->get_gui_base()->add_child(warning_dialog);
@@ -594,7 +594,7 @@ InspectorDock::InspectorDock(EditorNode *p_editor, EditorData &p_editor_data) {
 	load_resource_dialog = memnew(EditorFileDialog);
 	add_child(load_resource_dialog);
 	load_resource_dialog->set_current_dir("res://");
-	load_resource_dialog->connect("file_selected", this, "_resource_file_selected");
+	load_resource_dialog->connect_signal("file_selected", this, "_resource_file_selected");
 
 	inspector = memnew(EditorInspector);
 	add_child(inspector);
@@ -610,8 +610,8 @@ InspectorDock::InspectorDock(EditorNode *p_editor, EditorData &p_editor_data) {
 
 	inspector->set_use_filter(true); // TODO: check me
 
-	inspector->connect("resource_selected", this, "_resource_selected");
-	inspector->connect("property_keyed", this, "_property_keyed");
+	inspector->connect_signal("resource_selected", this, "_resource_selected");
+	inspector->connect_signal("property_keyed", this, "_property_keyed");
 }
 
 InspectorDock::~InspectorDock() {

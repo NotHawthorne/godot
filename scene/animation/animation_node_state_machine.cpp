@@ -562,7 +562,7 @@ void AnimationNodeStateMachine::add_node(const StringName &p_name, Ref<Animation
 	emit_changed();
 	emit_signal("tree_changed");
 
-	p_node->connect("tree_changed", this, "_tree_changed", varray(), CONNECT_REFERENCE_COUNTED);
+	p_node->connect_signal("tree_changed", this, "_tree_changed", varray(), CONNECT_REFERENCE_COUNTED);
 }
 
 Ref<AnimationNode> AnimationNodeStateMachine::get_node(const StringName &p_name) const {
@@ -722,7 +722,7 @@ void AnimationNodeStateMachine::add_transition(const StringName &p_from, const S
 	tr.to = p_to;
 	tr.transition = p_transition;
 
-	tr.transition->connect("advance_condition_changed", this, "_tree_changed", varray(), CONNECT_REFERENCE_COUNTED);
+	tr.transition->connect_signal("advance_condition_changed", this, "_tree_changed", varray(), CONNECT_REFERENCE_COUNTED);
 
 	transitions.push_back(tr);
 }

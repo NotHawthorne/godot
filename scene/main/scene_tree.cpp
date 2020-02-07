@@ -1774,11 +1774,11 @@ void SceneTree::set_multiplayer(Ref<MultiplayerAPI> p_multiplayer) {
 	multiplayer = p_multiplayer;
 	multiplayer->set_root_node(root);
 
-	multiplayer->connect("network_peer_connected", this, "_network_peer_connected");
-	multiplayer->connect("network_peer_disconnected", this, "_network_peer_disconnected");
-	multiplayer->connect("connected_to_server", this, "_connected_to_server");
-	multiplayer->connect("connection_failed", this, "_connection_failed");
-	multiplayer->connect("server_disconnected", this, "_server_disconnected");
+	multiplayer->connect_signal("network_peer_connected", this, "_network_peer_connected");
+	multiplayer->connect_signal("network_peer_disconnected", this, "_network_peer_disconnected");
+	multiplayer->connect_signal("connected_to_server", this, "_connected_to_server");
+	multiplayer->connect_signal("connection_failed", this, "_connection_failed");
+	multiplayer->connect_signal("server_disconnected", this, "_server_disconnected");
 }
 
 void SceneTree::set_network_peer(const Ref<NetworkedMultiplayerPeer> &p_network_peer) {

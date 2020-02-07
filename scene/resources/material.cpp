@@ -207,7 +207,7 @@ void ShaderMaterial::set_shader(const Ref<Shader> &p_shader) {
 		rid = shader->get_rid();
 
 		if (Engine::get_singleton()->is_editor_hint()) {
-			shader->connect("changed", this, "_shader_changed");
+			shader->connect_signal("changed", this, "_shader_changed");
 		}
 	}
 

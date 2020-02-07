@@ -38,7 +38,7 @@ void ReparentDialog::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_ENTER_TREE) {
 
-		connect("confirmed", this, "_reparent");
+		connect_signal("confirmed", this, "_reparent");
 	}
 
 	if (p_what == NOTIFICATION_EXIT_TREE) {
@@ -93,7 +93,7 @@ ReparentDialog::ReparentDialog() {
 
 	vbc->add_margin_child(TTR("Reparent Location (Select new Parent):"), tree, true);
 
-	tree->get_scene_tree()->connect("item_activated", this, "_reparent");
+	tree->get_scene_tree()->connect_signal("item_activated", this, "_reparent");
 
 	//Label *label = memnew( Label );
 	//label->set_position( Point2( 15,8) );
@@ -106,7 +106,7 @@ ReparentDialog::ReparentDialog() {
 
 	//vbc->add_margin_child("Options:",node_only);
 
-	//cancel->connect("pressed", this,"_cancel");
+	//cancel->connect_signal("pressed", this,"_cancel");
 
 	get_ok()->set_text(TTR("Reparent"));
 }

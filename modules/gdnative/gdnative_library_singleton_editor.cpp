@@ -207,8 +207,8 @@ GDNativeLibrarySingletonEditor::GDNativeLibrarySingletonEditor() {
 	libraries->set_hide_root(true);
 	add_margin_child(TTR("Libraries: "), libraries, true);
 	updating = false;
-	libraries->connect("item_edited", this, "_item_edited");
-	EditorFileSystem::get_singleton()->connect("filesystem_changed", this, "_discover_singletons");
+	libraries->connect_signal("item_edited", this, "_item_edited");
+	EditorFileSystem::get_singleton()->connect_signal("filesystem_changed", this, "_discover_singletons");
 }
 
 #endif // TOOLS_ENABLED

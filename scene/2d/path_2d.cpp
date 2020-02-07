@@ -134,7 +134,7 @@ void Path2D::set_curve(const Ref<Curve2D> &p_curve) {
 	curve = p_curve;
 
 	if (curve.is_valid()) {
-		curve->connect("changed", this, "_curve_changed");
+		curve->connect_signal("changed", this, "_curve_changed");
 	}
 
 	_curve_changed();

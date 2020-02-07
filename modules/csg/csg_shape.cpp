@@ -909,7 +909,7 @@ void CSGMesh::set_mesh(const Ref<Mesh> &p_mesh) {
 	mesh = p_mesh;
 
 	if (mesh.is_valid()) {
-		mesh->connect("changed", this, "_mesh_changed");
+		mesh->connect_signal("changed", this, "_mesh_changed");
 	}
 
 	_make_dirty();
@@ -1825,8 +1825,8 @@ CSGBrush *CSGPolygon::_build_brush() {
 
 			path_cache = path;
 
-			path_cache->connect("tree_exited", this, "_path_exited");
-			path_cache->connect("curve_changed", this, "_path_changed");
+			path_cache->connect_signal("tree_exited", this, "_path_exited");
+			path_cache->connect_signal("curve_changed", this, "_path_changed");
 			path_cache = NULL;
 		}
 		curve = path->get_curve();

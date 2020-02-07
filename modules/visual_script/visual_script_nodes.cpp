@@ -3105,7 +3105,7 @@ void VisualScriptCustomNode::_bind_methods() {
 }
 
 VisualScriptCustomNode::VisualScriptCustomNode() {
-	connect("script_changed", this, "_script_changed");
+	connect_signal("script_changed", this, "_script_changed");
 }
 
 //////////////////////////////////////////

@@ -469,7 +469,7 @@ void AnimationTree::set_tree_root(const Ref<AnimationNode> &p_root) {
 	root = p_root;
 
 	if (root.is_valid()) {
-		root->connect("tree_changed", this, "_tree_changed");
+		root->connect_signal("tree_changed", this, "_tree_changed");
 	}
 
 	properties_dirty = true;
@@ -583,7 +583,7 @@ bool AnimationTree::_update_caches(AnimationPlayer *player) {
 				}
 
 				if (!child->is_connected("tree_exited", this, "_node_removed")) {
-					child->connect("tree_exited", this, "_node_removed", varray(child));
+					child->connect_signal("tree_exited", this, "_node_removed", varray(child));
 				}
 
 				switch (track_type) {
@@ -783,7 +783,7 @@ void AnimationTree::_process_graph(float p_delta) {
 		}
 
 		if (player) {
-			player->connect("caches_cleared", this, "_clear_caches");
+			player->connect_signal("caches_cleared", this, "_clear_caches");
 		}
 
 		last_animation_player = current_animation_player;
@@ -1308,7 +1308,7 @@ void AnimationTree::_notification(int p_what) {
 
 			Object *player = ObjectDB::get_instance(last_animation_player);
 			if (player) {
-				player->connect("caches_cleared", this, "_clear_caches");
+				player->connect_signal("caches_cleared", this, "_clear_caches");
 			}
 		}
 	}

@@ -147,7 +147,7 @@ void Sprite::set_texture(const Ref<Texture> &p_texture) {
 	texture = p_texture;
 
 	if (texture.is_valid())
-		texture->connect(CoreStringNames::get_singleton()->changed, this, "_texture_changed");
+		texture->connect_signal(CoreStringNames::get_singleton()->changed, this, "_texture_changed");
 
 	update();
 	emit_signal("texture_changed");

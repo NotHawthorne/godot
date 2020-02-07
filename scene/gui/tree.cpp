@@ -4032,15 +4032,15 @@ Tree::Tree() {
 	add_child(v_scroll);
 
 	range_click_timer = memnew(Timer);
-	range_click_timer->connect("timeout", this, "_range_click_timeout");
+	range_click_timer->connect_signal("timeout", this, "_range_click_timeout");
 	add_child(range_click_timer);
 
-	h_scroll->connect("value_changed", this, "_scroll_moved");
-	v_scroll->connect("value_changed", this, "_scroll_moved");
-	text_editor->connect("text_entered", this, "_text_editor_enter");
-	text_editor->connect("modal_closed", this, "_text_editor_modal_close");
-	popup_menu->connect("id_pressed", this, "_popup_select");
-	value_editor->connect("value_changed", this, "_value_editor_changed");
+	h_scroll->connect_signal("value_changed", this, "_scroll_moved");
+	v_scroll->connect_signal("value_changed", this, "_scroll_moved");
+	text_editor->connect_signal("text_entered", this, "_text_editor_enter");
+	text_editor->connect_signal("modal_closed", this, "_text_editor_modal_close");
+	popup_menu->connect_signal("id_pressed", this, "_popup_select");
+	value_editor->connect_signal("value_changed", this, "_value_editor_changed");
 
 	value_editor->set_as_toplevel(true);
 	text_editor->set_as_toplevel(true);

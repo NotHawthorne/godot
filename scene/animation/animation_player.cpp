@@ -264,7 +264,7 @@ void AnimationPlayer::_ensure_node_caches(AnimationData *p_anim) {
 
 		{
 			if (!child->is_connected("tree_exiting", this, "_node_removed"))
-				child->connect("tree_exiting", this, "_node_removed", make_binds(child), CONNECT_ONESHOT);
+				child->connect_signal("tree_exiting", this, "_node_removed", make_binds(child), CONNECT_ONESHOT);
 		}
 
 		TrackNodeCacheKey key;
@@ -1007,7 +1007,7 @@ void AnimationPlayer::remove_animation(const StringName &p_name) {
 
 void AnimationPlayer::_ref_anim(const Ref<Animation> &p_anim) {
 
-	Ref<Animation>(p_anim)->connect(SceneStringNames::get_singleton()->tracks_changed, this, "_animation_changed", varray(), CONNECT_REFERENCE_COUNTED);
+	Ref<Animation>(p_anim)->connect_signal(SceneStringNames::get_singleton()->tracks_changed, this, "_animation_changed", varray(), CONNECT_REFERENCE_COUNTED);
 }
 
 void AnimationPlayer::_unref_anim(const Ref<Animation> &p_anim) {

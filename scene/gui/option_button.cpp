@@ -363,9 +363,9 @@ OptionButton::OptionButton() {
 	popup->set_pass_on_modal_close_click(false);
 	popup->set_notify_transform(true);
 	popup->set_allow_search(true);
-	popup->connect("index_pressed", this, "_selected");
-	popup->connect("id_focused", this, "_focused");
-	popup->connect("popup_hide", this, "set_pressed", varray(false));
+	popup->connect_signal("index_pressed", this, "_selected");
+	popup->connect_signal("id_focused", this, "_focused");
+	popup->connect_signal("popup_hide", this, "set_pressed", varray(false));
 }
 
 OptionButton::~OptionButton() {

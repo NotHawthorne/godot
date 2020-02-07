@@ -166,7 +166,7 @@ void TextureRect::set_texture(const Ref<Texture> &p_tex) {
 	texture = p_tex;
 
 	if (texture.is_valid()) {
-		texture->connect(CoreStringNames::get_singleton()->changed, this, "_texture_changed");
+		texture->connect_signal(CoreStringNames::get_singleton()->changed, this, "_texture_changed");
 	}
 
 	update();

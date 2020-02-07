@@ -257,7 +257,7 @@ void EditorQuickOpen::_notification(int p_what) {
 
 	switch (p_what) {
 		case NOTIFICATION_ENTER_TREE: {
-			connect("confirmed", this, "_confirmed");
+			connect_signal("confirmed", this, "_confirmed");
 
 			search_box->set_clear_button_enabled(true);
 			FALLTHROUGH;
@@ -291,15 +291,15 @@ EditorQuickOpen::EditorQuickOpen() {
 	add_child(vbc);
 	search_box = memnew(LineEdit);
 	vbc->add_margin_child(TTR("Search:"), search_box);
-	search_box->connect("text_changed", this, "_text_changed");
-	search_box->connect("gui_input", this, "_sbox_input");
+	search_box->connect_signal("text_changed", this, "_text_changed");
+	search_box->connect_signal("gui_input", this, "_sbox_input");
 	search_options = memnew(Tree);
 	vbc->add_margin_child(TTR("Matches:"), search_options, true);
 	get_ok()->set_text(TTR("Open"));
 	get_ok()->set_disabled(true);
 	register_text_enter(search_box);
 	set_hide_on_ok(false);
-	search_options->connect("item_activated", this, "_confirmed");
+	search_options->connect_signal("item_activated", this, "_confirmed");
 	search_options->set_hide_root(true);
 	search_options->set_hide_folding(true);
 	search_options->add_constant_override("draw_guides", 1);

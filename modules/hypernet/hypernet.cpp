@@ -15,16 +15,74 @@ void	HyperNetManager::sendPacket(int type, int subtype, std::string data)
 		std::cout << "cannot send packet, network down\n";
 		return ;
 	}
-	packet += to_string(type);
+	packet += std::to_string(type);
 	packet += "|";
-	packet += to_string(subtype);
+	packet += std::to_string(subtype);
 	packet += "|";
 	packet += data;
-	packet += "]"
-	std::cout << "sending\n";
+	std::cout << "sending" << packet << std::endl;
 	send(_sock, packet.c_str(), packet.length(), 0);
 	std::cout << "sent\n";
 	
+}
+
+std::string	HyperNetManager::processPacket(std::string packet)
+{
+	std::istringstream f(packet);
+	std::vector<std::string> substrs;
+	std::string s;
+
+	std::cout << "processing " << packet << std::endl;
+	while (getline(f, s, '|'))
+		substrs.push_back(s);
+	if (std::stoi(substrs[0]) == SYSTEM)
+	{
+		if (substrs.size() == 7 && std::stoi(substrs[1]) == REGISTER_UNIT)
+		{
+			try
+			{
+				Variant	id(String(substrs[2].c_str()));
+				Variant	hp(String(substrs[3].c_str()));
+				Variant	x(String(substrs[4].c_str()));
+				Variant	y(String(substrs[5].c_str()));
+				Variant	type(String(substrs[6].c_str()));
+				Variant	*args[5] = {&id, &hp, &x, &y, &type};
+				Variant::CallError err;
+				while (_bindings.count("register_unit") == 0);
+				_bindings["register_unit"]->call_func((const Variant**)args, 5, err);
+			}
+			catch (std::exception &e)
+			{
+				std::cout << "request failed\n";
+			}
+		}
+		else if (substrs.size() == 5 && std::stoi(substrs[1]) == UPDATE_UNIT)
+		{
+			std::cout << "updating unit " << substrs[2] << std::endl;
+			Variant	id(String(substrs[2].c_str()));
+			Variant	x(String(substrs[3].c_str()));
+			Variant	y(String(substrs[4].c_str()));
+			Variant	*args[3] = {&id, &x, &y};
+			Variant::CallError err;
+			while (_bindings.count("update_unit") == 0);
+			_bindings["update_unit"]->call_func((const Variant**)args, 3, err);
+		}
+		else
+			std::cout << "invalid request\n";
+	}
+	else
+		std::cout << "user request\n";
+	return (std::string(""));
+}
+
+int		HyperNetManager::moveUnit(std::string id, int dir)
+{
+	std::cout << "moveUnit called!\n";
+	std::string	out(id);
+	out += "|";
+	out += std::to_string(dir);
+	sendPacket(USER, MOVE, out);
+	return (1);
 }
 
 void	*HyperNetManager::listener(void *d)
@@ -57,17 +115,25 @@ void	*HyperNetManager::listener(void *d)
 	}
 	_sock = sock;
 	_listener_status = 1;
-	int stat = fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK);
+	fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK);
 	for (;;)
 	{
 		if (!auth)
-			handshake();
+			sendPacket(SYSTEM, HANDSHAKE, _key);
 		if (_listener_status == -1)
 			return (NULL);
 		if (read(sock, _buffer, 1024) > 0)
-			std::cout << "RECIEVED: " << _buffer << std::endl;
+		{
+			std::string	in(_buffer, strlen(_buffer));
+			std::istringstream f(in);
+			std::string s;
+			while (getline(f, s, ']'))
+				processPacket(s);
+		}
 		if (!auth)
 		{
+			std::cout << "auth successful\n";
+			auth++;
 			//register authentication packet
 		}
 	}
@@ -92,13 +158,50 @@ std::string	HyperNetManager::genKey()
 	return (ret);
 }
 
+// vvvvvv NEEDS TO RUN IN THREAD vvvvvv
+
+void	*HyperNetManager::threadScript(void *data)
+{
+	char	*c = (char*)data;
+
+	if (luaL_dofile(_L, c))
+	{
+		std::cout << "lua error " << lua_tostring(_L, -1) << std::endl;
+		lua_pop(_L, 1);
+	}
+	_luaThread.join();
+	return (NULL);
+}
+
+void HyperNetManager::runScript(String filepath)
+{
+	void		*data;
+
+	std::wstring ws = filepath.c_str();
+	std::string s(ws.begin(), ws.end());
+	char	*c = (char*)s.c_str();
+	data = c;
+
+	std::cout << c << std::endl;
+	lua_settop(_L, 0);
+	_luaThread = std::thread(&HyperNetManager::threadScript, this, data);
+	lua_gettop(_L);
+}
+
 HyperNetManager::HyperNetManager() : _buffer { 0 }
 {
 	_listener_status = 0;
 	_sock = 0;
-	int	fd = 0;
 	char	buffer[1024] = { 0 };
 
+	_L = luaL_newstate();
+	luaL_openlibs(_L);
+	luabridge::getGlobalNamespace(_L)
+		.beginClass<HyperNetManager>("HyperNetManager")
+			.addFunction("moveUnit", &HyperNetManager::moveUnit)
+		.endClass();
+	luabridge::push(_L, this);
+	lua_setglobal(_L, "manager");
 	srand(time(NULL));
 	std::ifstream f("./key");
 	if (f.good())
@@ -125,6 +228,7 @@ HyperNetManager::~HyperNetManager()
 {
 	_listener_status = -1;
 	_t.join();
+	lua_close(_L);
 	std::cout << "HyperNetManager ended!\n";
 }
 
@@ -147,6 +251,14 @@ void	HyperNetManager::sendData(String s)
 void	HyperNetManager::_bind_methods()
 {
 	ClassDB::bind_method(D_METHOD("sendData", "s"), &HyperNetManager::sendData);
+	ClassDB::bind_method(D_METHOD("runScript", "filepath"), &HyperNetManager::runScript);
+	ClassDB::bind_method(D_METHOD("registerCallback", "s", "func"), &HyperNetManager::registerCallback);
+}
+
+void	HyperNetManager::registerCallback(String s, Ref<FuncRef> r)
+{
+	std::cout << "registering " << s.utf8() << std::endl;
+	_bindings.insert(std::make_pair(std::string(s.utf8()), r));
 }
 
 void	HyperNetManager::setListenerStatus(int n) { _listener_status = n; }

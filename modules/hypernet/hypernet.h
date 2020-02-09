@@ -1,7 +1,14 @@
 #ifndef TELOS_PLAYER_H
 # define TELOS_PLAYER_H
 
+extern "C" {
+	# include "lua.h"
+	# include "lualib.h"
+	# include "lauxlib.h"
+}
+
 # include "core/reference.h"
+# include "core/func_ref.h"
 # include <iostream>
 # include <sys/socket.h>
 # include <arpa/inet.h>
@@ -13,8 +20,13 @@
 # include <thread>
 # include <errno.h>
 # include <fstream>
+# include <map>
+# include <sstream>
+# include <vector>
+# include "luabridge/Source/LuaBridge/LuaBridge.h"
 
 typedef void * (*THREADCAST)(void*);
+typedef int	(*lua_CFunction)(lua_State *L);
 
 enum call_type {
 	SYSTEM,
@@ -31,7 +43,9 @@ enum user_calls {
 };
 
 enum return_calls {
-	HANDSHAKE_ACCEPT
+	GAME_STATE,
+	REGISTER_UNIT,
+	UPDATE_UNIT
 };
 
 class HyperNetManager : public Reference {
@@ -43,6 +57,9 @@ private:
 	int				_sock;
 	std::thread		_t;
 	std::string		_key;
+	std::map<std::string, Ref<FuncRef>> _bindings;
+	lua_State		*_L;
+	std::thread		_luaThread;
 
 protected:
 	static void _bind_methods();
@@ -51,8 +68,13 @@ public:
 	void		sendData(String s);
 	void		setListenerStatus(int n);
 	int			getListenerStatus() const;
-	int			handhsake();
+	void		sendPacket(int type, int subtype, std::string data);
+	std::string	processPacket(std::string packet);
 	std::string	genKey();
+	int			moveUnit(std::string id, int dir);
+	void		registerCallback(String s, Ref<FuncRef> r);
+	void		runScript(String filepath);	
+	void		*threadScript(void *data);
 	HyperNetManager();
 	~HyperNetManager();
 };

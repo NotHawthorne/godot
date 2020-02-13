@@ -2,6 +2,33 @@
 #include <fcntl.h>
 #define PORT 4242
 
+std::string	HyperNetManager::structurePacket(int type, int subtype, std::string data)
+{
+	std::string	ret;
+
+	ret += std::to_string(type);
+	ret += "|";
+	ret += std::to_string(subtype);
+	ret += "|";
+	ret += data;
+	ret += "]";
+	return (ret);
+}
+
+unsigned	HyperNetManager::timeSinceLastTick(void) {
+	return unsigned((clock() - _ticks) * 1000.0/CLOCKS_PER_SEC);
+}
+
+void	HyperNetManager::ticker(void)
+{
+	if (timeSinceLastTick() > 250)
+	{
+		_ticks = clock();
+		send(_sock, _packetStack.c_str(), _packetStack.length(), 0);
+		_packetStack.clear();
+	}
+}
+
 void	HyperNetManager::sendPacket(int type, int subtype, std::string data)
 {
 	std::string	packet;
@@ -15,15 +42,11 @@ void	HyperNetManager::sendPacket(int type, int subtype, std::string data)
 		std::cout << "cannot send packet, network down\n";
 		return ;
 	}
-	packet += std::to_string(type);
-	packet += "|";
-	packet += std::to_string(subtype);
-	packet += "|";
-	packet += data;
+	packet = structurePacket(type, subtype, data);
 	std::cout << "sending" << packet << std::endl;
+	_packetStack += packet;
 	send(_sock, packet.c_str(), packet.length(), 0);
-	std::cout << "sent\n";
-	
+	//std::cout << "sent\n";
 }
 
 std::string	HyperNetManager::processPacket(std::string packet)
@@ -68,7 +91,7 @@ std::string	HyperNetManager::processPacket(std::string packet)
 			_bindings["update_unit"]->call_func((const Variant**)args, 3, err);
 		}
 		else
-			std::cout << "invalid request\n";
+			std::cout << "invalid request" << std::stoi(substrs[1]) << std::endl;
 	}
 	else
 		std::cout << "user request\n";
@@ -118,6 +141,11 @@ void	*HyperNetManager::listener(void *d)
 	fcntl(sock, F_SETFL, fcntl(sock, F_GETFL, 0) | O_NONBLOCK);
 	for (;;)
 	{
+		if (_luaStatus == -1)
+		{
+			_luaStatus = 0;
+			_luaThread.join();
+		}
 		if (!auth)
 			sendPacket(SYSTEM, HANDSHAKE, _key);
 		if (_listener_status == -1)
@@ -127,6 +155,7 @@ void	*HyperNetManager::listener(void *d)
 			std::string	in(_buffer, strlen(_buffer));
 			std::istringstream f(in);
 			std::string s;
+			std::cout << "IN: " << _buffer << std::endl;
 			while (getline(f, s, ']'))
 				processPacket(s);
 		}
@@ -136,6 +165,9 @@ void	*HyperNetManager::listener(void *d)
 			auth++;
 			//register authentication packet
 		}
+		for (int i = 0; i != 1024; i++)
+			_buffer[i] = 0;
+		ticker();
 	}
 	return (NULL);
 }
@@ -158,33 +190,34 @@ std::string	HyperNetManager::genKey()
 	return (ret);
 }
 
-// vvvvvv NEEDS TO RUN IN THREAD vvvvvv
-
 void	*HyperNetManager::threadScript(void *data)
 {
 	char	*c = (char*)data;
 
+	std::cout << c << std::endl;
 	if (luaL_dofile(_L, c))
 	{
 		std::cout << "lua error " << lua_tostring(_L, -1) << std::endl;
 		lua_pop(_L, 1);
 	}
-	_luaThread.join();
+	_luaStatus = -1;
+	delete[] c;
 	return (NULL);
 }
 
 void HyperNetManager::runScript(String filepath)
 {
-	void		*data;
-
 	std::wstring ws = filepath.c_str();
 	std::string s(ws.begin(), ws.end());
 	char	*c = (char*)s.c_str();
-	data = c;
+	char	*f = new char[strlen(c) + 1];
+	strcpy(f, c);
+	f[strlen(c)] = 0;
+	_luaStatus = 1;
 
 	std::cout << c << std::endl;
 	lua_settop(_L, 0);
-	_luaThread = std::thread(&HyperNetManager::threadScript, this, data);
+	_luaThread = std::thread(&HyperNetManager::threadScript, this, f);
 	lua_gettop(_L);
 }
 
@@ -193,6 +226,8 @@ HyperNetManager::HyperNetManager() : _buffer { 0 }
 	_listener_status = 0;
 	_sock = 0;
 	char	buffer[1024] = { 0 };
+	_luaStatus = 0;
+	_ticks = clock();
 
 	_L = luaL_newstate();
 	luaL_openlibs(_L);
@@ -228,6 +263,11 @@ HyperNetManager::~HyperNetManager()
 {
 	_listener_status = -1;
 	_t.join();
+	if (_luaStatus == 1)
+		std::cout << "waiting for lua thread to close...\n";
+	while (_luaStatus == 1);
+	if (_luaStatus == -1)
+		_luaThread.join();
 	lua_close(_L);
 	std::cout << "HyperNetManager ended!\n";
 }

@@ -60,6 +60,9 @@ private:
 	std::map<std::string, Ref<FuncRef>> _bindings;
 	lua_State		*_L;
 	std::thread		_luaThread;
+	int				_luaStatus;
+	std::string		_packetStack;
+	unsigned		_ticks;
 
 protected:
 	static void _bind_methods();
@@ -75,6 +78,10 @@ public:
 	void		registerCallback(String s, Ref<FuncRef> r);
 	void		runScript(String filepath);	
 	void		*threadScript(void *data);
+	void		addPacket(std::string packet);
+	void		ticker(void);
+	unsigned	timeSinceLastTick(void);
+	std::string	structurePacket(int type, int subtype, std::string data);
 	HyperNetManager();
 	~HyperNetManager();
 };

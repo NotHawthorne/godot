@@ -2,4 +2,5 @@ Import ('env')
 
 env.Append(CPPPATH=["luabridge/Source/LuaBridge"])
 env.Append(LIBS=["lua"])
+env.Append(LIBS=["pthread"])
 env.add_source_files(env.modules_sources, "*.cpp")
